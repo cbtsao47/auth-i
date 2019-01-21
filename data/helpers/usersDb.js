@@ -1,0 +1,21 @@
+const db = require("../dbConfig");
+const usersDb = {
+  get: async id => {
+    if (id) {
+      const query = await db("users").where({ id });
+      return query;
+    }
+    const query = await db("users");
+    return query;
+  },
+  create: async userInfo => {
+    const result = await db("users").where("users.username", userInfo.username);
+    if (result.length) {
+      return [];
+    } else {
+      const query = await db("users").insert(userInfo);
+      return query;
+    }
+  }
+};
+module.exports = usersDb;
