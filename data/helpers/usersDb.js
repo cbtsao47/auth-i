@@ -20,7 +20,7 @@ const usersDb = {
   check: async userInfo => {
     const result = await db("users").where("users.username", userInfo.username);
     if (result.length) {
-      return result;
+      return result[0];
     } else {
       return false;
     }
