@@ -46,10 +46,10 @@ route.get("/users/:id", protected, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db.get(id);
-    if (result.length) {
+    if (result) {
       res.json(result);
     } else {
-      res.status(404).json({ message: "no" });
+      res.status(404).json({ message: "not found" });
     }
   } catch (err) {
     res.status(500).json({ message: "internal server error" });
