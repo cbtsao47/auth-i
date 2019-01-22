@@ -1,37 +1,16 @@
 const express = require("express");
 const route = express.Router();
 const bcrypt = require("bcryptjs");
-const session = require("express-session");
-const knexSessionStore = require("connect-session-knex")(session);
+
 const db = require("../data/helpers/usersDb");
-const sessionConfig = {
-  name: "Monkey", //default is sid
-  secret: "thisismysecret",
-  cookie: {
-    maxAge: 1000 * 60 * 10,
-    secure: false // only send the cookie over https, should be true in production
-  },
-  httpOnly: true, //js can't touch this cookie
-  resave: false,
-  saveUninitialized: false,
-  store: new knexSessionStore({
-    tablename: "sessions",
-    sidfieldname: "sid",
-    knex: require("../data/dbConfig"),
-    createtable: true,
-    clearInterval: 1000 * 60 * 10
-  })
-};
 
-route.use(session(sessionConfig));
-
-function protected(req, res, next) {
+const protected = (req, res, next) => {
   if (req.session.user) {
     next();
   } else {
     res.status(401).json({ message: "invalid username/password" });
   }
-}
+};
 
 route.get("/users", protected, async (req, res) => {
   try {
@@ -79,7 +58,6 @@ route.post("/login", async (req, res) => {
       res.json({ message: "invalid username/password" });
     } else {
       req.session.user = user;
-      console.log(user);
       res.json({ messge: `Welcome, ${user.username}` });
     }
   } catch (err) {
@@ -89,7 +67,9 @@ route.post("/login", async (req, res) => {
 
 route.get("/logout", async (req, res) => {
   if (req.session) {
-    req.session.destroy();
+    req.session.destroy(err => {
+      res.send("logged out");
+    });
   } else {
     res.status(400).json({ message: "already logged out" });
   }
