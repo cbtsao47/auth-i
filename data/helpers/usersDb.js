@@ -16,6 +16,14 @@ const usersDb = {
       const query = await db("users").insert(userInfo);
       return query;
     }
+  },
+  check: async userInfo => {
+    const result = await db("users").where("users.username", userInfo.username);
+    if (result.length) {
+      return result;
+    } else {
+      return false;
+    }
   }
 };
 module.exports = usersDb;
