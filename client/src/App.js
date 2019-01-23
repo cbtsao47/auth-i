@@ -6,7 +6,7 @@ import View from "./components/View";
 import Login from "./components/Login";
 import axios from "axios";
 import { Route } from "react-router";
-
+axios.defaults.withCredentials = true;
 class App extends Component {
   constructor() {
     super();
@@ -24,8 +24,11 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Route path="/" render={props => <Login {...props} />} />
-          <Route path="/index" render={props => <View {...props} />} />
+          <Route exact path="/" render={props => <Login {...props} />} />
+          <Route
+            path="/home"
+            render={props => <View {...props} data={this.state.data} />}
+          />
           <Route path="/register" render={props => <Register {...props} />} />
         </header>
       </div>

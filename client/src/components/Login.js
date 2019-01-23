@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-
 class Login extends React.Component {
   constructor() {
     super();
@@ -19,7 +18,7 @@ class Login extends React.Component {
     const credentials = { ...this.state };
     axios
       .post("http://localhost:5000/api/login", credentials)
-      .then(res => console.log(res.data.message))
+      .then(res => console.log(res))
       .catch(err => console.log(err));
   };
   render() {
