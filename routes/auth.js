@@ -66,7 +66,8 @@ route.post("/login", async (req, res) => {
 });
 
 route.get("/logout", async (req, res) => {
-  if (req.session) {
+  if (req.session.user) {
+    console.log(req.session, "session");
     req.session.destroy(err => {
       res.send("logged out");
     });
